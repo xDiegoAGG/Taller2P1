@@ -1,5 +1,5 @@
 import os
-import csv
+import re
 from django.core.management.base import BaseCommand
 from movie.models import Movie
 
@@ -7,23 +7,21 @@ class Command(BaseCommand):
     help = "Update images :D"
 
     def handle(self, *args, **kwargs):
-        # 📥 Ruta del archivo CSV con las descripciones actualizadas
         updated_count = 0
 
-    # 📖 Abrimos el CSV y leemos cada fila
-        
         for movie in Movie.objects.all():
-            if not os.path.exists("./media/movie/images/m_" + movie.title + ".png"):
-                self.stderr.write(f"Image file  'm_{movie.title}.png' not found.")
+            clean_title = self.remove_special_characters(movie.title)
+            image_path = f"./media/movie/images/m_{clean_title}.png"
+            
+            if not os.path.exists(image_path):
+                self.stderr.write(f"Image file 'm_{clean_title}.png' not found.")
             else:
-                movie.image = "movie/images/m_" + movie.title + ".png"
+                movie.image = f"movie/images/m_{clean_title}.png"
                 movie.save()
                 updated_count += 1
-                self.stdout.write(self.style.SUCCESS(f"Updated: {movie.title} image succesfully loaded"))
+                self.stdout.write(self.style.SUCCESS(f"Updated: {movie.title} image successfully loaded"))
 
-    # ✅ Al finalizar, muestra cuásntas películas se actualizaron
         self.stdout.write(self.style.SUCCESS(f"Finished updating {updated_count} movies image from Images Folder."))
 
-
-    def specialCharacter(self): 
-        ()
+    def remove_special_characters(self, text):
+        return re.sub(r'[^a-zA-Z0-9_\- ]', '', text)  # Elimina caracteres especiales excepto guiones y espacios
