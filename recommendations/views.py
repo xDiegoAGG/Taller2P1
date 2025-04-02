@@ -5,7 +5,6 @@ import numpy as np
 from openai import OpenAI
 from dotenv import load_dotenv
 
-# Cargar API Key de OpenAI
 
 # Cargar la API Key
 load_dotenv('./api_keys.env')
@@ -15,10 +14,6 @@ client = OpenAI(api_key=os.environ.get('openaiApiKey'))
 def cosine_similarity(a, b):
         return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
-    # Recibir el prompt del usuario (esto se debe recibir desde el formulario de la app)
-
-def cosine_similarity(a, b):
-    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 # Vista de recomendación
 def recommendation(request):
