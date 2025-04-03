@@ -36,7 +36,3 @@ class Command(BaseCommand):
                 self.stderr.write(f"❌ Failed to generate embedding for {movie.title}: {e}")
 
         self.stdout.write(self.style.SUCCESS("🎯 Finished generating embeddings for all movies"))
-
-        for movie in Movie.objects.all():
-            embedding_vector = np.frombuffer(movie.emb, dtype=np.float32)
-            print(movie.title, embedding_vector[:5])  # Muestra los primeros valores
